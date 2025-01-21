@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Motor de Búsqueda de Noticias</title>
+</head>
+<body>
+    <h1>Motor de Búsqueda de Noticias</h1>
+    <form id="buscador">
+        <label for="palabras_clave">Palabras clave (separadas por comas):</label><br>
+        <input type="text" id="palabras_clave" required><br><br>
+
+        <label for="idioma">Idioma:</label><br>
+        <input type="text" id="idioma" value="es"><br><br>
+
+        <label for="max_noticias">Número máximo de noticias:</label><br>
+        <input type="number" id="max_noticias" value="20"><br><br>
+
+        <button type="submit">Buscar</button>
+    </form>
+
+    <div id="resultados"></div>
+
+    <script>
+        const backendUrl = "https://motor-cngo.onrender.com"; // Cambia esto por la URL de tu backend
+
+        document.getElementById('buscador').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const palabras_clave = document.getElementById('palabras_clave').value.split(',');
+            const idioma = document.getElementById('idioma').value;
+            const max_noticias = document.getElementById('max_noticias').value;
+
+            try {
+                const response = await fetch(`${backendUrl}/buscar`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        palabras_clave,
+                        idioma,
+                        max_noticias: parseInt(max_noticias),
+                    }),
+                });
+
+                if (!response.ok) throw new Error("Error al conectar con el backend.");
+
+                const data = await response.json();
+
+                const resultadosDiv = document.getElementById('resultados');
+                resultadosDiv.innerHTML = '';
+                data.forEach((noticia) => {
+                    resultadosDiv.innerHTML += `
+                        <div>
+                            <h2>${noticia.Título}</h2>
+                            <p><strong>Fuente:</strong> ${noticia.Fuente}</p>
+                            <a href="${noticia.Enlace}" target="_blank">Leer más</a>
+                            <hr>
+                        </div>
+                    `;
+                });
+            } catch (error) {
+                alert("Hubo un error al buscar las noticias. Intenta nuevamente.");
+            }
+        });
+    </script>
+</body>
+</html>
