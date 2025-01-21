@@ -11,6 +11,8 @@ from flask import Flask, request, jsonify
 from datetime import datetime, timedelta
 import requests
 import pandas as pd
+import os
+
 
 app = Flask(__name__)
 
@@ -80,6 +82,6 @@ def buscar():
 @app.route('/')
 def home():
     return "¡Bienvenido al Motor de Búsqueda de Noticias API!"
-
 if __name__ == '__main__':
-    app.run(debug=True)
+    port = int(os.environ.get('PORT', 5000))  #asigna un puerto dinámico
+    app.run(host='0.0.0.0', port=port)  
