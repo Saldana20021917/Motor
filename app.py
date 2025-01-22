@@ -12,8 +12,12 @@ from datetime import datetime, timedelta
 import requests
 import pandas as pd
 import os
+from flask_cors import CORS  # Importamos flask-cors
 
 app = Flask(__name__)
+
+# Configurar CORS para permitir solicitudes desde cualquier origen (puedes restringirlo a tu frontend si prefieres)
+CORS(app, resources={r"/*": {"origins": "*"}})
 
 # Clave de API de NewsAPI
 API_KEY = "f2fe1d43327e4c7d9139fe4ae9d9d556"
