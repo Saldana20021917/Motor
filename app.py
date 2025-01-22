@@ -7,12 +7,11 @@ Original file is located at
     https://colab.research.google.com/drive/1r8BYEwa5oyF_kgfGBmwsdM8lMqm_JKfO
 """
 
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 from datetime import datetime, timedelta
 import requests
 import pandas as pd
 import os
-
 
 app = Flask(__name__)
 
@@ -78,10 +77,11 @@ def buscar():
 
     return jsonify(resultados)
 
-# Endpoint raíz
+# Endpoint raíz para servir index.html
 @app.route('/')
 def home():
-    return "¡Bienvenido al Motor de Búsqueda de Noticias API!"
+    return render_template('index.html')
+
 if __name__ == '__main__':
-    port = int(os.environ.get('PORT', 5000))  #asigna un puerto dinámico
-    app.run(host='0.0.0.0', port=port)  
+    port = int(os.environ.get('PORT', 5000))  # Asigna un puerto dinámico
+    app.run(host='0.0.0.0', port=port)
