@@ -58,7 +58,10 @@ def buscar_noticias(api_key, palabras_clave, idioma="es", fuentes=None, max_noti
             for articulo in articulos
         ]
     except requests.exceptions.RequestException as e:
-        return {"error": f"Error al realizar la solicitud: {e}"}
+        print(f"Error al realizar la solicitud: {e}")
+        if response:
+            print(f"Respuesta completa: {response.text}")  # Muestra la respuesta completa de la API
+        return jsonify({"error": "Error al realizar la solicitud", "details": str(e)}), 500
 
 # Endpoint para buscar noticias
 @app.route('/buscar', methods=['POST'])
@@ -77,11 +80,10 @@ def buscar():
 
     return jsonify(resultados)
 
-# Endpoint raíz para servir index.html
+# Endpoint raíz
 @app.route('/')
 def home():
     return render_template('index.html')
 
 if __name__ == '__main__':
-    port = int(os.environ.get('PORT', 5000))  # Asigna un puerto dinámico
-    app.run(host='0.0.0.0', port=port)
+    app.run(debug=True, host='0.0.0.0', port=5000)
